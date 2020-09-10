@@ -4,39 +4,10 @@ for tech talk project :)
 
 """
 # from typeguard import typechecked
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5 import QtWidgets
-from PyQt5 import uic
-from PyQt5.QtCore import Qt
+from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QPushButton, QCommandLinkButton, QTableView, QColumnView, QPlainTextEdit
-import pandas as pd
 from libs.logmanagement.Analyzer import Analyzer
-
-class TableModel(QtCore.QAbstractTableModel):
-
-    def __init__(self, data):
-        super(TableModel, self).__init__()
-        self._data = data
-
-    def data(self, index, role):
-        if role == Qt.DisplayRole:
-            value = self._data.iloc[index.row(), index.column()]
-            return str(value)
-
-    def rowCount(self, index):
-        return self._data.shape[0]
-
-    def columnCount(self, index):
-        return self._data.shape[1]
-    
-    def headerData(self, section, orientation, role):
-        # section is the index of the column/row.
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Horizontal:
-                return str(self._data.columns[section])
-
-            if orientation == Qt.Vertical:
-                return str(self._data.index[section])
+from libs.ui.TableModel import TableModel
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -88,9 +59,10 @@ class MainWindow(QtWidgets.QMainWindow):
         tbl.setModel()
 
     def get_data(self):
-        _analyzer = Analyzer(['DlxSnapshotsUtils.log'])
+        _analyzer = Analyzer([
+            # 'DlxSnapshotsUtils.log.2020-09-09',
+            'DlxSnapshotsUtils.log',
+        ])
         data = _analyzer.get_simple_df()
         self.model = TableModel(data)
         self._get_table_view().setModel(self.model)
-
-
