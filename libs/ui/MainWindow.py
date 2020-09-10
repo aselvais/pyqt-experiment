@@ -3,10 +3,40 @@ For tabular data check https://www.learnpyqt.com/courses/model-views/qtableview-
 for tech talk project :)
 
 """
+# from typeguard import typechecked
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtWidgets
 from PyQt5 import uic
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QPushButton, QCommandLinkButton, QTableView, QColumnView, QPlainTextEdit
-from typeguard import typechecked
+import pandas as pd
+from libs.logmanagement.Analyzer import Analyzer
+
+class TableModel(QtCore.QAbstractTableModel):
+
+    def __init__(self, data):
+        super(TableModel, self).__init__()
+        self._data = data
+
+    def data(self, index, role):
+        if role == Qt.DisplayRole:
+            value = self._data.iloc[index.row(), index.column()]
+            return str(value)
+
+    def rowCount(self, index):
+        return self._data.shape[0]
+
+    def columnCount(self, index):
+        return self._data.shape[1]
+    
+    def headerData(self, section, orientation, role):
+        # section is the index of the column/row.
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
+                return str(self._data.columns[section])
+
+            if orientation == Qt.Vertical:
+                return str(self._data.index[section])
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -42,6 +72,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def clicked_linkme(self):
         self._log("button btn_linkme clicked !!!! YEAH!")
+        self.get_data()
 
     def _log(self, txt: str = ""):
         """Add text to the plain text box in the GUI
@@ -55,4 +86,11 @@ class MainWindow(QtWidgets.QMainWindow):
         # setModel(self, model: QtCore.QAbstractItemModel) -> None: ...
         tbl = self._get_table_view()
         tbl.setModel()
-        
+
+    def get_data(self):
+        _analyzer = Analyzer(['DlxSnapshotsUtils.log'])
+        data = _analyzer.get_simple_df()
+        self.model = TableModel(data)
+        self._get_table_view().setModel(self.model)
+
+
