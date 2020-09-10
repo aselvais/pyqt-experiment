@@ -13,6 +13,7 @@ from libs.ui.TableModel import TableModel
 class MainWindow(QtWidgets.QMainWindow):
 
     ui: QtWidgets
+    model: TableModel
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -39,14 +40,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self._get_btn_linkme().clicked.connect(self.clicked_linkme)
 
     def clicked_clickme(self):
+        """
+        When clickme button is clicked
+        """
         self._log("button btn_linkme clicked !!!")
 
     def clicked_linkme(self):
+        """
+        when clicking the linkme button
+        """
         self._log("button btn_linkme clicked !!!! YEAH!")
-        self.get_data()
+        self.add_table_data()
 
     def _log(self, txt: str = ""):
-        """Add text to the plain text box in the GUI
+        """
+        Add text to the plain text box in the GUI
 
         Args:
             txt (str, optional): [description]. Defaults to "".
@@ -54,15 +62,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self._get_plain_text_edit().appendPlainText(txt)
 
     def add_table_data(self):
-        # setModel(self, model: QtCore.QAbstractItemModel) -> None: ...
-        tbl = self._get_table_view()
-        tbl.setModel()
+        """
+        Push data to the data grid
+        """
+        self._get_table_view().setModel(self.get_data())
 
     def get_data(self):
+        """
+        Return a TableModel class with log data
+
+        Returns:
+            TableModel: log data
+        """
         _analyzer = Analyzer([
             # 'DlxSnapshotsUtils.log.2020-09-09',
             'DlxSnapshotsUtils.log',
         ])
-        data = _analyzer.get_simple_df()
-        self.model = TableModel(data)
-        self._get_table_view().setModel(self.model)
+        self.model = TableModel(_analyzer.get_simple_df())
+        return self.model
