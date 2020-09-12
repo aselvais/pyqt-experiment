@@ -19,37 +19,29 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__(*args, **kwargs)
         self.ui = uic.loadUi("ui/mainwindow.ui", self)
         self._setup_connectors()
+        # text_edit_message
+        # text_edit_funcname
+        # text_edit_process
+        # combo_box_levelname
+        # date_edit
 
-    def _get_btn_clickme(self) -> QPushButton:
-        return self.ui.btn_clickme
+    def _setup_connectors(self):
+        self._get_btn_submit().clicked.connect(self.clicked_btn_submit)
 
-    def _get_btn_linkme(self) -> QCommandLinkButton:
-        return self.ui.btn_linkme
+    def _get_btn_submit(self) -> QCommandLinkButton:
+        return self.ui.btn_submit
 
     def _get_table_view(self) -> QTableView:
         return self.ui.table_view
 
-    def _get_column_view(self) -> QColumnView:
-        return self.ui.column_view
-
     def _get_plain_text_edit(self) -> QPlainTextEdit:
         return self.ui.plain_text_edit
 
-    def _setup_connectors(self):
-        self._get_btn_clickme().clicked.connect(self.clicked_clickme)
-        self._get_btn_linkme().clicked.connect(self.clicked_linkme)
-
-    def clicked_clickme(self):
-        """
-        When clickme button is clicked
-        """
-        self._log("button btn_linkme clicked !!!")
-
-    def clicked_linkme(self):
+    def clicked_btn_submit(self):
         """
         when clicking the linkme button
         """
-        self._log("button btn_linkme clicked !!!! YEAH!")
+        self._log("button btn_submit clicked !!!! YEAH!")
         self.add_table_data()
 
     def _log(self, txt: str = ""):
@@ -75,7 +67,8 @@ class MainWindow(QtWidgets.QMainWindow):
             TableModel: log data
         """
         _analyzer = Analyzer([
-            # 'DlxSnapshotsUtils.log.2020-09-09',
+            # 'DlxSnapshotsUtils.log.2020-09-04',
+            # 'DlxSnapshotsUtils.log.2020-09-03',
             'DlxSnapshotsUtils.log',
         ])
         self.model = TableModel(_analyzer.get_simple_df())
