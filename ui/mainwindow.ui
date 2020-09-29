@@ -181,12 +181,22 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QGraphicsView" name="graphics_view"/>
+        </item>
        </layout>
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2"/>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QProgressBar" name="progress_bar">
+      <property name="value">
+       <number>24</number>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
