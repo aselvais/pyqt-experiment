@@ -12,3 +12,10 @@ the Qt designer which is a WYSIWYG GUI using widget drag and drop (yup, this is 
 
 We will see how it goes... If I get to a point where the project could be useful (as a JSON viewer), I will improve the docs ...
 
+
+## Instalation
+
+```
+pip install -r requirements.txt
+```
+
